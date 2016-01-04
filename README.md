@@ -111,7 +111,7 @@ Now cd into the `/var/www` directory and we'll start creating some files:
 $ cd /var/www
 $ mkdir crowdin-sync
 $ cd crowdin-sync
-$ mkdir logs repos pids
+$ mkdir logs repos pids keys
 $ touch config.ru app.rb unicorn.rb
 ```
 
@@ -169,39 +169,45 @@ $ vim app.rb
 ```ruby
 require 'sinatra'
 
-CROWDIN_API_KEY = '[<<< Crowdin API Key >>>]'
-
 get '/' do
-  "Works!"
+  'Works!'
 end
 
 get '/crowdin/:repo' do |repo|
   system("""
     cd repos/#{repo} &&
     git pull origin master &&
-    CROWDIN_API_KEY=#{CROWDIN_API_KEY} crowdin-cli download &&
+    CROWDIN_API_KEY=$(cat ../../keys/#{repo}) crowdin-cli download &&
     git add -A &&
     git commit -m '[i18n] Sync Translations' &&
     git push origin master
   """)
-  "Done."
+  'Done.'
 end
 
 post '/github/:repo' do |repo|
   system("""
     cd repos/#{repo} &&
     git pull origin master &&
-    CROWDIN_API_KEY=#{CROWDIN_API_KEY} crowdin-cli upload sources --auto-update -b master
+    CROWDIN_API_KEY=$(cat ../../keys/#{repo}) crowdin-cli upload sources --auto-update -b master
   """)
   'Done.'
 end
+
 ```
 
-Before you exit this file be sure to fill in your api key.
+Now we need to add the Crowdin api key for this server to use. For simplicity we
+are just putting them in a `keys` directory in plain text. This is not secure
+and you may want to setup something better than that.
 
-```diff
-- CROWDIN_API_KEY = '[<<< Crowdin API Key >>>]'
-+ CROWDIN_API_KEY = '0123456789abcdefghijklmnopqrstuvwxyz'
+Create a file with your key.
+
+```sh
+$ vim keys/[YOUR_REPO_NAME]
+```
+
+```
+0123456789abcdefghijklmnopqrstuvwxyz
 ```
 
 Finally we need to setup nginx.
@@ -291,6 +297,12 @@ Now cd into your `crowdin-sync` directory and start a unicorn daemon.
 $ cd /var/www/crowdin-sync
 $ unicorn -c unicorn.rb -D
 ```
+
+> Note: If you ever want to restart your server simply run:
+>
+> ```sh
+> $ kill $(cat pids/unicorn.pid) && unicorn -c unicorn.rb -D
+> ```
 
 Finally you just need to restart the nginx service.
 
