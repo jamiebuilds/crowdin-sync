@@ -1,0 +1,10 @@
+project_identifier: [YOUR_PROJECT_NAME]
+api_key_env: CROWDIN_API_KEY
+base_path: .
+files:
+  - source: '/README.md'
+    translation: '/translations/%locale%/%original_file_name%'
+    languages_mapping:
+      locale:
+        'es-ES': 'es-ES'
+        'zh-CN': 'zh-CN'
