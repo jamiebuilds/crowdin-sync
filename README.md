@@ -43,7 +43,7 @@ read the [contributing guidelines](/CONTRIBUTING.md) for more information.
 - [中文](/translations/zh-CN/README.md)
 - [繁體中文](/translations/zh-TW/README.md)
 
-**[Request another translation](/issues/new?title=Translation%20Request:%20[Please%20enter%20language%20here]&body=I%20am%20able%20to%20translate%20this%20language%20[yes/no])**
+**[Request another translation](https://github.com/thejameskyle/crowdin-sync/issues/new?title=Translation%20Request:%20[Please%20enter%20language%20here]&body=I%20am%20able%20to%20translate%20this%20language%20[yes/no])**
 
 ## Guide
 
