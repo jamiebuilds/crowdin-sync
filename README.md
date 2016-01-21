@@ -419,7 +419,7 @@ $ tail -f /var/www/crowdin-sync/logs/unicorn.log
 Now you can start inviting people to Crowdin by giving them the following url:
 
 ```
-https://crowdin.com/project/[YOUR_PROJECT_NAME]/invite
+https://crowdin.com/project/[YOUR_PROJECT_IDENTIFIER]/invite
 ```
 
 I would recommend creating a `CONTRIBUTING.md` file in your repo like the one
