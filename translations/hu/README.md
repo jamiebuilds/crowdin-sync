@@ -30,7 +30,7 @@ If you are reading a non-english translation of this document you may still find
   * [Português (Brasil)](/translations/pt-BR/README.md)
   * [Portugisisk](/translations/pt-PT/README.md)
   * [Română](/translations/ro/README.md)
-  * [Pусский](/translations/ru/README.md)
+  * [Русский](/translations/ru/README.md)
   * [Српски језик (Ћирилица)](/translations/sr/README.md)
   * [Svenska](/translations/sv-SE/README.md)
   * [Türk](/translations/tr/README.md)
@@ -39,7 +39,7 @@ If you are reading a non-english translation of this document you may still find
   * [中文](/translations/zh-CN/README.md)
   * [繁體中文](/translations/zh-TW/README.md)
 
-**[Request another translation](/issues/new?title=Translation%20Request:%20[Please%20enter%20language%20here]&body=I%20am%20able%20to%20translate%20this%20language%20[yes/no])**
+**[Request another translation](https://github.com/thejameskyle/crowdin-sync/issues/new?title=Translation%20Request:%20[Please%20enter%20language%20here]&body=I%20am%20able%20to%20translate%20this%20language%20[yes/no])**
 
 ## Guide
 
@@ -381,7 +381,7 @@ $ tail -f /var/www/crowdin-sync/logs/unicorn.log
 
 Now you can start inviting people to Crowdin by giving them the following url:
 
-    https://crowdin.com/project/[YOUR_PROJECT_NAME]/invite
+    https://crowdin.com/project/[YOUR_PROJECT_IDENTIFIER]/invite
     
 
 I would recommend creating a `CONTRIBUTING.md` file in your repo like the one here. If fact, you can simply copy the one in here, but be sure to update the urls with your own project id.

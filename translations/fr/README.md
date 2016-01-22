@@ -1,12 +1,12 @@
 # Crowdin Sync
 
-This document covers how to setup Crowdin, GitHub, and DigitalOcean to sync translations in a repository.
+Ce document décrit comment configurer Crowdin, GitHub et DigitalOcean pour synchroniser les traductions d'un répertoire.
 
-If you are reading a non-english translation of this document you may still find english sections that have not yet been translated. If you would like to contribute to one of the translations you must do so through Crowdin. Please read the [contributing guidelines](/CONTRIBUTING.md) for more information.
+Si vous lisez une traduction de ce document, il se peut que certaines des sections soient toujours en anglais et n'ont donc pas encore été traduites. Si vous souhaitez contribuer à l'une des traductions, vous devez le faire via Crowdin. Veuillez lire le [guide du contributeur](/CONTRIBUTING.md) pour plus d'informations.
 
 [![cc-by-4.0](https://licensebuttons.net/l/by/4.0/80x15.png)](http://creativecommons.org/licenses/by/4.0/)
 
-## Translations
+## Traductions
 
   * [English](/README.md)
   * [Afrikaans](/translations/af/README.md)
@@ -39,19 +39,19 @@ If you are reading a non-english translation of this document you may still find
   * [中文](/translations/zh-CN/README.md)
   * [繁體中文](/translations/zh-TW/README.md)
 
-**[Request another translation](/issues/new?title=Translation%20Request:%20[Please%20enter%20language%20here]&body=I%20am%20able%20to%20translate%20this%20language%20[yes/no])**
+**[Demander une autre traduction](https://github.com/thejameskyle/crowdin-sync/issues/new?title=Translation%20Request:%20[Please%20enter%20language%20here]&body=I%20am%20able%20to%20translate%20this%20language%20[yes/no])**
 
 ## Guide
 
-### Setting up Crowdin
+### Paramétrage de Crowdin
 
-[Create a Crowdin account](https://crowdin.com/join).
+[Créer un compte Crowdin](https://crowdin.com/join).
 
-[Create a project](https://crowdin.com/createproject).
+[Créer un projet](https://crowdin.com/createproject).
 
-> If you do not want to pay for Crowdin and you qualify you may request an open source project [here](https://crowdin.com/page/open-source-project-setup-request).
+> Si vous ne souhaitez pas payer pour Crowdin et répondez aux obligations, vous pouvez proposer un projet open source en cliquant [ici](https://crowdin.com/page/open-source-project-setup-request).
 
-Once you have created your project visit the General Settings page:
+Une fois que vous avez créé votre projet, rendez-vous sur la page General Settings :
 
     https://crowdin.com/project/[YOUR_PROJECT_NAME]/settings#general
     
@@ -65,30 +65,30 @@ Next go to the "Integration" page for your project and find the "API key". You'l
     https://crowdin.com/project/[YOUR_PROJECT_NAME]/settings#integration
     
 
-### Setting up your server
+### Configurer votre serveur
 
-Create a [Digital Ocean](https://www.digitalocean.com) account and then create a new droplet. I chose to use Ubuntu with the $5/mo 512MB/1 CPU tier.
+Créez un compte de [Digital Ocean](https://www.digitalocean.com), puis créez un nouveau projet. J'ai choisi d'utiliser Ubuntu avec la couche CPU 512MB/1 à 5$/ mois.
 
-You don't need any special features, but make sure to add an SSH key for your machine so you can SSH in later.
+Vous n'avez pas besoin des fonctionnalités spécifiques, mais assurez-vous d'ajouter une clé SSH à votre machine afin que vous puissiez utiliser SSH plus tard.
 
-Then just name your droplet something like "translations" and click "Create".
+Puis donnez un nom à votre projet comme « traductions » puis cliquez sur "Create".
 
 You should be taken to your "Droplets" page where you will see your newly created droplet.
 
-Find the "IP Address" and we'll use it to SSH into the droplet.
+Trouvez l'adresse IP et nous l'utiliserons pour le SSH de notre projet.
 
 ```sh
 $ ssh root@[YOUR_DROPLET_IP]
 ```
 
-Now we'll install all the tools that we will need for this droplet.
+Il nous faut maintenant installer tous les outils dont nous aurons besoin pour ce projet.
 
 ```sh
 $ apt-get install git build-essential g++ make ruby-full nginx unicorn vim
 $ gem install crowdin-cli sinatra unicorn
 ```
 
-> This is probably going to take awhile.
+> Cela va probablement prendre un certain temps.
 
 Now cd into the `/var/www` directory and we'll start creating some files:
 
@@ -381,7 +381,7 @@ $ tail -f /var/www/crowdin-sync/logs/unicorn.log
 
 Now you can start inviting people to Crowdin by giving them the following url:
 
-    https://crowdin.com/project/[YOUR_PROJECT_NAME]/invite
+    https://crowdin.com/project/[YOUR_PROJECT_IDENTIFIER]/invite
     
 
 I would recommend creating a `CONTRIBUTING.md` file in your repo like the one here. If fact, you can simply copy the one in here, but be sure to update the urls with your own project id.

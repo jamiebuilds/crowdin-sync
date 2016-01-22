@@ -1,12 +1,12 @@
 # Crowdin Sync
 
-This document covers how to setup Crowdin, GitHub, and DigitalOcean to sync translations in a repository.
+У цій документації відображено процес налаштування Crowdin, GitHub та DigitalOcean для синхронізації перекладів у репозиторії.
 
-If you are reading a non-english translation of this document you may still find english sections that have not yet been translated. If you would like to contribute to one of the translations you must do so through Crowdin. Please read the [contributing guidelines](/CONTRIBUTING.md) for more information.
+Якщо ви читаєте не англійський переклад цієї документації, ви все ще можете знайти неперекладені англійські тексти. Якщо ви бажаєте допомогти з будь-яким із перекладів, це можна зробити на платформі Crowdin. Будь ласка, ознайомтесь із [довідкою перекладача](/CONTRIBUTING.md) для детальнішої інформації.
 
 [![cc-by-4.0](https://licensebuttons.net/l/by/4.0/80x15.png)](http://creativecommons.org/licenses/by/4.0/)
 
-## Translations
+## Переклади
 
   * [English](/README.md)
   * [Afrikaans](/translations/af/README.md)
@@ -39,58 +39,58 @@ If you are reading a non-english translation of this document you may still find
   * [中文](/translations/zh-CN/README.md)
   * [繁體中文](/translations/zh-TW/README.md)
 
-**[Request another translation](/issues/new?title=Translation%20Request:%20[Please%20enter%20language%20here]&body=I%20am%20able%20to%20translate%20this%20language%20[yes/no])**
+**[Надіслати запит на додання відсутньої мови](https://github.com/thejameskyle/crowdin-sync/issues/new?title=Translation%20Request:%20[Please%20enter%20language%20here]&body=I%20am%20able%20to%20translate%20this%20language%20[yes/no])**
 
-## Guide
+## Інструкція
 
-### Setting up Crowdin
+### Налаштування Crowdin
 
-[Create a Crowdin account](https://crowdin.com/join).
+[Створіть обліковий запис в Crowdin](https://crowdin.com/join).
 
-[Create a project](https://crowdin.com/createproject).
+[Створіть проект](https://crowdin.com/createproject).
 
-> If you do not want to pay for Crowdin and you qualify you may request an open source project [here](https://crowdin.com/page/open-source-project-setup-request).
+> Якщо ви не хочете платити Crowdin і ваш проект відповідає необхідним критеріям, ви можете надіслати запит на безкоштовну ліцензію для проектів з відкритим кодом [тут](https://crowdin.com/page/open-source-project-setup-request).
 
-Once you have created your project visit the General Settings page:
+Після створення проекту, перейдіть у вкладку загальних налаштувань:
 
     https://crowdin.com/project/[YOUR_PROJECT_NAME]/settings#general
     
 
-Change "Duplicate Strings" to "Show, but auto-translate them".
+Встановіть опцію "Дублікати" (Duplicate Strings) на "Показувати, але автоматично перекладати" (Show, but auto-translate them).
 
-You may also want to allow translators to create glossary terms and send notifications about new strings and project completion. Maybe even upload a project logo.
+Також ви можете дозволити перекладачам створювати терміни в глосарії та надсилати сповіщення про нові тексти для перекладу, а також бути сповіщеними про завершення перекладів на окрему мову. Можливо, навіть захочете завантажити логотип проекту.
 
-Next go to the "Integration" page for your project and find the "API key". You'll want to save this for later. Be careful what you do with this api key, it is supposed to be secret. If you expose it for any reason, you can go back to this page to regenerate it.
+Після цього перемкніться у вкладку "Інтеграція" (Integration) і знайдіть секцію "API ключ" (API key). Рекомендується зберегти його для подальшого використання. Будьте обережні з API-ключем, нікому не розголошуйте його. Якщо з певної причини він стане публічним, ви завжди можете відкрити вкладку "Інтеграція" знову і створити новий ключ.
 
     https://crowdin.com/project/[YOUR_PROJECT_NAME]/settings#integration
     
 
-### Setting up your server
+### Налаштування сервера
 
-Create a [Digital Ocean](https://www.digitalocean.com) account and then create a new droplet. I chose to use Ubuntu with the $5/mo 512MB/1 CPU tier.
+Створіть обліковий запис в [Digital Ocean](https://www.digitalocean.com), після чого створіть новий дроплет. Особисто я використовую машину на Ubuntu із 512MB/1 CPU за $5/місяць.
 
-You don't need any special features, but make sure to add an SSH key for your machine so you can SSH in later.
+Вам не знадобляться будь-які інші додаткові можливості, але не забудьте додати SSH-ключ для своєї машини для використання SSH у майбутньому.
 
-Then just name your droplet something like "translations" and click "Create".
+Після цього назвіть свій дроплет щось на зразок "translations" і клацніть "Create".
 
-You should be taken to your "Droplets" page where you will see your newly created droplet.
+Ви опинитесь на сторінці "Дроплетів", де помітите щойно створений дроплет.
 
-Find the "IP Address" and we'll use it to SSH into the droplet.
+Відшукайте секцію "IP Address", ми використовуватимемо її для SSH в дроплеті.
 
 ```sh
 $ ssh root@[YOUR_DROPLET_IP]
 ```
 
-Now we'll install all the tools that we will need for this droplet.
+Тепер необхідно встановити усі інструменти, необхідні для дроплета.
 
 ```sh
 $ apt-get install git build-essential g++ make ruby-full nginx unicorn vim
 $ gem install crowdin-cli sinatra unicorn
 ```
 
-> This is probably going to take awhile.
+> Це може зайняти деякий час.
 
-Now cd into the `/var/www` directory and we'll start creating some files:
+Тепер перейдіть у директорію `/var/www`, почнемо створювати деякі файли:
 
 ```sh
 $ cd /var/www
@@ -100,13 +100,13 @@ $ mkdir logs repos pids keys
 $ touch config.ru app.rb unicorn.rb
 ```
 
-Then let's populate these files with code:
+Після цього, заповнимо ці файли наступним кодом:
 
 ```sh
 $ vim config.ru
 ```
 
-> Note: To paste the following text into vim, hit the `i` key, paste, hit `esc` and then type `:wq`.
+> Примітка: Для того щоб вставити наступний текст у vim, натисніть кнопку `i`, вставте, натисніть `esc`, після чого надрукуйте `:wq`.
 
 ```ruby
 require 'rubygems'
@@ -180,9 +180,9 @@ end
 
 ```
 
-Now we need to add the Crowdin api key for this server to use. For simplicity we are just putting them in a `keys` directory in plain text. This is not secure and you may want to setup something better than that.
+Тепер ми повинні додати API-ключ від Crowdin для використання на цьому сервері. Для простоти, ми покладемо їх в директорію `keys` у форматі TXT. Це не надто безпечно, тому можливо ви захочете обрати більш надійне рішення.
 
-Create a file with your key.
+Створіть файл з вашим ключем.
 
 ```sh
 $ vim keys/[YOUR_REPO_NAME]
@@ -191,15 +191,15 @@ $ vim keys/[YOUR_REPO_NAME]
     0123456789abcdefghijklmnopqrstuvwxyz
     
 
-Finally we need to setup nginx.
+Наостанок, налаштуємо nginx.
 
-Remove the default configuration file
+Видаліть стандартний файл конфігурації
 
 ```sh
 $ rm -v /etc/nginx/sites-available/default
 ```
 
-Create a new, blank configuration
+Створіть нову, порожню конфігурацію
 
 ```sh
 $ vim /etc/nginx/conf.d/default.conf
@@ -237,57 +237,57 @@ $ vim /etc/nginx/conf.d/default.conf
     }
     
 
-### Setting up GitHub
+### Налаштування GitHub
 
-We're going to be working with Git directly, if you're using GitHub you might want to setup a bot account instead of using your normal account.
+Ми працюватимемо із Git напряму. Якщо ви використовуєте GitHub, можливо варто налаштувати бот-аккаунт замість використання звичайного аккаунта.
 
-Go ahead and create an account like @thejameskylebot that goes along with my @thejameskyle account.
+Йдемо далі: налаштуйте аккаунт на зразок @thejameskylebot який буде поряд із моїм аккаунтом @thejameskyle.
 
-Then follow this guide to setting up SSH keys from your Digital Ocean droplet:
+Після цього, налаштуйте SSH-ключі для вашого Digital Ocean дроплета згідно нижчевказаній інструкції:
 
 https://help.github.com/articles/generating-ssh-keys/
 
-Now update your git config for committing:
+Тепер необхідно оновити конфіг git для коміту:
 
 ```sh
 $ git config --global user.name "thejameskylebot"
 $ git config --global user.email "me+bot@thejameskyle.com"
 ```
 
-And on GitHub give your bot push permission by going to this page:
+На GitHub, надайте своєму боту доступ до push на цій сторінці:
 
     https://github.com/[YOUR_USER_NAME]/[YOUR_REPO_NAME]/settings/collaboration
     
 
-Now go to your `repos` directory and clone the repo.
+Перейдіть у свою директорію `repos` і склонуйте репозиторій.
 
 ```sh
 $ cd /var/www/crowdin-sync/repos
 $ git clone git@github.com:[YOUR_USER_NAME]/[YOUR_REPO_NAME].git
 ```
 
-### Starting your server
+### Запуск сервера
 
-Now cd into your `crowdin-sync` directory and start a unicorn daemon.
+Перейдіть у свою директорію `crowdin-sync` і запустіть демон (daemon) unicorn.
 
 ```sh
 $ cd /var/www/crowdin-sync
 $ unicorn -c unicorn.rb -D
 ```
 
-> Note: If you ever want to restart your server simply run:
+> Примітка: Якщо ви захочете перезапустити свій сервер, просто виконайте команду:
 > 
 > ```sh
 $ kill $(cat pids/unicorn.pid) && unicorn -c unicorn.rb -D
 ```
 
-Finally you just need to restart the nginx service.
+І нарешті, ви повинні перезапустити службу nginx.
 
 ```sh
 $ service nginx restart
 ```
 
-Now you should be able to open your droplets IP address in a web browser.
+Тепер ви повинні мати змогу відкрити IP-адресу свого дроплета у веб-браузері.
 
     http://[YOUR_DROPLET_IP]/
     
@@ -295,17 +295,17 @@ Now you should be able to open your droplets IP address in a web browser.
     Works!
     
 
-### Setting up Repo
+### Налаштування репозиторію
 
-The Crowdin CLI is controlled primarily through a YAML file.
+В першу чергу, інструмент синхронізації Crowdin CLI керується файлом конфігурації в форматі YAML.
 
-In your repository create a `crowdin.yaml` file.
+У своєму репозиторії ви повинні створити файл `crowdin.yaml`.
 
 ```sh
 $ touch crowdin.yaml
 ```
 
-Then fill out the file.
+Після цього, заповніть файл.
 
 ```yaml
 project_identifier: [YOUR_PROJECT_NAME]
@@ -320,81 +320,78 @@ files:
         'zh-CN': 'zh-CN'
 ```
 
-> Note: Leave `CROWDIN_API_KEY` as is.
+> Примітка: Залиште поле `CROWDIN_API_KEY` як є.
 
-For information on how to configure `files:` consult the [Crowdin CLI docs](https://github.com/crowdin/crowdin-cli#configuration).
+Щоб дізнатись, як саме конфігурується секція `files:`, ознайомтесь із [документацією Crowdin CLI](https://github.com/crowdin/crowdin-cli#configuration). Також, ви завжди можете звернутись до [служби підтримки](https://crowdin.com/contacts)..
 
-Now commit this file and push it to GitHub.
+Тепер закомітьте цей файл і запуште на GitHub.
 
-### Setting up GitHub Webhooks
+### Налаштування вебхуків GitHub
 
-Go to the "Add webhook" page for your repo on GitHub:
+Перейдіть на сторінку "Додати вебхук" для вашого репозиторію на GitHub:
 
     https://github.com/[YOUR_USER_NAME]/[YOUR_REPO_NAME]/settings/hooks/new
     
 
-Enter the payload as your droplets ip address followed by the webhook path.
+Тепер необхідно ввести таку інформацію як IP-адреси ваших дроплетів разом із шляхами вебхуків.
 
     http://[YOUR_DROPLET_IP]/github/[YOUR_REPO_NAME]
     
 
-Save this webhook.
+Збережіть цей вебхук.
 
-You'll notice that right away GitHub calls this webhook and if you go to Crowdin you should see the files you set in your `crowdin.yaml` file.
+Ви відразу ж помітите, що GitHub надсилає цей вебхук і якщо ви перейдете до Crowdin, ви побачите файли, що були вказані у вашому файлі конфігурації `crowdin.yaml`.
 
-If this is not the case, take a look at your log file.
+Якщо цього не сталось, перегляньте логи.
 
 ```sh
 $ tail -f /var/www/crowdin-sync/logs/unicorn.log
 ```
 
-### Setting up Crowdin Webhooks
+### Налаштування вебхуків Crowdin
 
-Now that we have GitHub pushing changes to Crowdin, we need to get Crowdin sending translations back.
+Після того як GitHub успішно оновлює будь-які зміни в Crowdin, ми повинні навчити Crowdin повертати переклади.
 
-Go back to the "Integration" page for your project.
+Перейдіть на сторінку "Інтеграція" (Integration) з налаштувань вашого проекту.
 
     https://crowdin.com/project/[YOUR_PROJECT_NAME]/settings#integration
     
 
-Scroll down and click "Configure Webhooks".
+Прокрутіть сторінку вниз і клацніть по "Налаштувати вебхуки" (Configure Webhooks).
 
-Enter the following in each field and click "Update".
-
-    http://[YOUR_DROPLET_IP]/crowdin/[YOUR_REPO_NAME]
-    
-
-This should be it. When translations get updated they should be sent to your repo. It may take up to 10-15 minutes for Crowdin to send the updated translations (I believe they may wait for no activity for a few minutes).
-
-I would recommend waiting the first time to make sure that Crowdin is calling the webhook, but if you ever want to manually trigger the webhook yourself you can simply visit the webhook url in the browser.
+Введіть наступне в кожне поле і натисність кнопку "Update".
 
     http://[YOUR_DROPLET_IP]/crowdin/[YOUR_REPO_NAME]
     
 
-Again if anything goes wrong or nothing happens try tailing your log file.
+Практично, це все. Коли переклади будуть оновлені, вони надсилатимуться у ваш репозиторій. Це може зайняти до 10-15 хвилин перш ніж Crowdin надішле оновлені переклади (ймовірно платформа чекає на неактивність впродовж кількох хвилин).
+
+Я рекомендую зачекати перший раз, щоб переконатись що Crowdin автоматично надсилає вебхук. Але якщо ви хочете запустити вебхук вручну, ви завжди можете запустити вебхук по URL в браузері.
+
+    http://[YOUR_DROPLET_IP]/crowdin/[YOUR_REPO_NAME]
+    
+
+Знову ж таки, якщо раптом щось піде не за планом чи нічого не відбудеться взагалі, спробуйте детально розглянути лог-файл.
 
 ```sh
 $ tail -f /var/www/crowdin-sync/logs/unicorn.log
 ```
 
-### Begin translating
+### Починайте переклад
 
-Now you can start inviting people to Crowdin by giving them the following url:
+Тепер ви можете почати запрошувати людей в Crowdin, просто надавши їм таке посилання:
 
-    https://crowdin.com/project/[YOUR_PROJECT_NAME]/invite
+    https://crowdin.com/project/[YOUR_PROJECT_IDENTIFIER]/invite
     
 
-I would recommend creating a `CONTRIBUTING.md` file in your repo like the one here. If fact, you can simply copy the one in here, but be sure to update the urls with your own project id.
+Рекомендую створити файл `CONTRIBUTING.md` у власному репозиторії, такий же як в моєму. Загалом, ви можете просто скопіювати мій файл, але обов'язково переконайтеся що URL-адреси збігаються з вашим ідентифікатором проекту.
 
-You can also a message at the top of your documentation for the non-english versions like this:
+Також ви можете додати зверху документації не на англійській мові повідомлення на зразок:
 
 ```md
-If you are reading a non-english translation of this document you may still find
-english sections that have not yet been translated. If you would like to
-contribute to one of the translations you must do so through Crowdin. Please
-read the [contributing guidelines](/CONTRIBUTING.md) for more information.
+If you are reading a non-english translation of this document you may still find English sections that have not yet been translated. If you would like to contribute to one of the translations you must do so through Crowdin. Please read the [contributing guidelines](/CONTRIBUTING.md) for more information.
 ```
 
-I would also suggest you add a list of languages like the one above, it brings attention to the translations to potential translators, and readers who might not otherwise know about the translations.
+А ще я раджу додати перелік усіх мов проекту як зображено на початку документації. Це допоможе звернути увагу потенційних перекладачів до вашого проекту перекладу, а читачам буде приємно читати документацію рідною мовою.
 
-**Happy translating!**
+**Вдалих перекладів!**
