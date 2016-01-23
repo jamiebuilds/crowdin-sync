@@ -1,5 +1,7 @@
 # Crowdin Sync
 
+> #### _[Want to know why you should bother translating your documentation? Read this.](https://medium.com/@thejameskyle/the-language-of-programming-7983b8f6910d#.qj2crl37k)_
+
 This document covers how to setup Crowdin, GitHub, and DigitalOcean to sync
 translations in a repository.
 
