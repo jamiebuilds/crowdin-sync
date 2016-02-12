@@ -178,7 +178,8 @@ end
 get '/crowdin/:repo' do |repo|
   system("""
     cd repos/#{repo} &&
-    git pull origin master &&
+    git fetch origin master -p &&
+    git reset --hard origin/master &&
     CROWDIN_API_KEY=$(cat ../../keys/#{repo}) crowdin-cli download &&
     git add -A &&
     git commit -m '[i18n] Sync Translations' &&
@@ -190,12 +191,12 @@ end
 post '/github/:repo' do |repo|
   system("""
     cd repos/#{repo} &&
-    git pull origin master &&
+    git fetch origin master -p &&
+    git reset --hard origin/master &&
     CROWDIN_API_KEY=$(cat ../../keys/#{repo}) crowdin-cli upload sources --auto-update -b master
   """)
   'Done.'
 end
-
 ```
 
 Now we need to add the Crowdin api key for this server to use. For simplicity we
