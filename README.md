@@ -180,7 +180,7 @@ get '/crowdin/:repo' do |repo|
     cd repos/#{repo} &&
     git fetch origin master -p &&
     git reset --hard origin/master &&
-    CROWDIN_API_KEY=$(cat ../../keys/#{repo}) crowdin-cli download &&
+    CROWDIN_API_KEY=$(cat ../../keys/#{repo}) crowdin-cli download -b master &&
     git add -A &&
     git commit -m '[i18n] Sync Translations' &&
     git push origin master
