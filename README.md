@@ -70,13 +70,12 @@ You may also want to allow translators to create glossary terms and send
 notifications about new strings and project completion. Maybe even upload a
 project logo.
 
-Next go to the "Integration" page for your project and find the "API key".
-You'll want to save this for later. Be careful what you do with this api key, it
-is supposed to be secret. If you expose it for any reason, you can go back to
-this page to regenerate it.
+Next go to the "API" page for your project.
+You'll want to find and save the key for later. Be careful what you do with this api key, it is supposed to be secret. _If you expose it for any reason, you can go back to
+this page to regenerate it._
 
 ```
-https://crowdin.com/project/[YOUR_PROJECT_NAME]/settings#integration
+https://crowdin.com/project/[YOUR_PROJECT_NAME]/settings#api
 ```
 
 ### Setting up your server
