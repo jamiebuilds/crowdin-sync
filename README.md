@@ -267,7 +267,7 @@ want to setup a bot account instead of using your normal account.
 Go ahead and create an account like @thejameskylebot that goes along with my
 @thejameskyle account.
 
-Then follow this guide to setting up SSH keys from your Digital Ocean droplet:
+Then follow this guide to set up SSH keys from your Digital Ocean droplet:
 
 https://help.github.com/articles/generating-ssh-keys/
 
@@ -443,3 +443,7 @@ attention to the translations to potential translators, and readers who might
 not otherwise know about the translations.
 
 **Happy translating!**
+
+**Troubleshooting**
+
+You may run into issues related to your SSH keys. If your github bot's keys have a passphrase it can prevent automatically pulling/pushing updates. One workaround is to generate SSH keys on your Digital Ocean droplet without a passphrase and associating that with your github bot. Alternatively, you can consider generating a SSH key without a passphrase, copy the public key to your personal account as a deploy key, and assigning that key the ability to read and write to the associated repo.
