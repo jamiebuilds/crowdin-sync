@@ -1,5 +1,15 @@
 require 'sinatra'
 
+def githubsync (repo)
+  system("""
+    cd repos/#{repo} &&
+    git fetch origin master -p &&
+    git reset --hard origin/master &&
+    CROWDIN_API_KEY=$(cat ../../keys/#{repo}) crowdin-cli upload sources --auto-update -b master
+  """)
+  'Done.'
+end
+
 get '/' do
   'Works!'
 end
@@ -17,12 +27,11 @@ get '/crowdin/:repo' do |repo|
   'Done.'
 end
 
+# allows manually triggering github sync from web
+get '/github/:repo' do |repo|
+  githubsync(repo)
+end
+
 post '/github/:repo' do |repo|
-  system("""
-    cd repos/#{repo} &&
-    git fetch origin master -p &&
-    git reset --hard origin/master &&
-    CROWDIN_API_KEY=$(cat ../../keys/#{repo}) crowdin-cli upload sources --auto-update -b master
-  """)
-  'Done.'
+  githubsync(repo)
 end
